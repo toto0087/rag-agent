@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-agent
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rag-agent
+  template:
+    metadata:
+      labels:
+        app: rag-agent
+    spec:
+      containers:
+        - name: rag-agent
+          image: rag-agent:latest
+          imagePullPolicy: Never
+          env:
+            - name: CHROMA_HOST
+              value: "chroma-db"
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "500m"

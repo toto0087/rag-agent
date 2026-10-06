@@ -13,8 +13,9 @@ def obtener_embedding(texto):
 def partir_en_chunks(texto, tam=500):
     return [texto[i:i+tam] for i in range(0, len(texto), tam)]
 
-# Conectar a Chroma en disco
-cliente = chromadb.PersistentClient(path="./chroma_db")
+# Conectar a Chroma por red (el servicio en Kubernetes)
+CHROMA_HOST = os.environ.get("CHROMA_HOST", "localhost")
+cliente = chromadb.HttpClient(host=CHROMA_HOST, port=8000)
 
 # Borrar la colección vieja y recrearla desde cero (para no duplicar)
 try:
